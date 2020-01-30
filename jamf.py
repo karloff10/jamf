@@ -46,9 +46,9 @@ Will remove messages from imap after transfer to our smtp server
 SHOW_IMAP_FOLDER = True / False
 When active it will show your the avalible imap folder on provider
 '''
-provider = {
-        1: {'login':'example@gmail.com', 'password':'secret1', 'host':'imap.gmail.com', 'port':'', 'addr_to':'example@gmx.net', 'addr_fro>
-        2: {'login':'example@gmx.net', 'password':'secret1', 'host':'imap.gmx.net', 'port':'', 'addr_to':'example@gmail.com', 'addr_from'>
+provider = { 
+        1: {'login':'example@gmail.com', 'password':'secret1', 'host':'imap.gmail.com', 'port':'', 'addr_to':'example@gmx.net', 'addr_from':'example@gmail.com', 'folder':'INBOX'}, 
+        2: {'login':'example@gmx.net', 'password':'secret1', 'host':'imap.gmx.net', 'port':'', 'addr_to':'example@gmail.com', 'addr_from':'example@gmx.net', 'folder':'INBOX'}
             }
 
 SMTP_DESTINATION = {'server':'smtp.example.com', 'port':'25', 'user':'username', 'password':'password', 'debug_level':'3'}
