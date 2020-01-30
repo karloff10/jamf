@@ -6,8 +6,8 @@ Created on Wed Jan 29 2020
 
 
 jampf - Just another mail fetcher
-jampf can fetch imap mails from your provider and forward it to an smtp
-like fetchmail it did. 
+jampf can fetch imap messages from your provider and forward it to an smtp
+similar to fetchmail. 
 """
 from imaplib import IMAP4_SSL
 from smtplib import SMTP
@@ -17,9 +17,8 @@ import sys
 
 #Example Configuration
 '''
-Provider settings are stored in a nasted dictionary, so you can easily edit and add new.
-For new provider settings copy an existing entry, just remember to increment the counter at beginn
-and the comma at the end of the line, execpt for last entry.
+Provider settings are stored in a nested dictionary, so you can easily edit them and add new items.
+To add new provider settings, just add a new entry and fill in the variables. 
 
 #example provider configuration
 provider = { 
@@ -27,24 +26,24 @@ provider = {
         2: {'login':'example@gmx.net', 'password':'secret1', 'host':'imap.gmx.net', 'port':'', 'addr_to':'example@gmail.com', 'addr_from':'example@gmx.net', 'folder':'INBOX'}
             }
 
-In this dict you configure the target SMTP Server where you want to deliver the fetched messages to.
+This dict is for configuring the target SMTP Server where you want to deliver the fetched messages to.
 SMTP_DESTINATION = {'server':'smtp.example.com', 'port':'25', 'user':'username', 'password':'password', 'debug_level':'3'}
 
-The following settings are bolean, valid entrys are True or False
+The following settings are bolean, valid variables are True or False.
 
 SMTP_AUTH = True / False
-This setting can be usefull if you don't need to auth on the SMTP Server, for example if the service run local.
+This setting can be useful if you don't need to auth on the SMTP Server, for example if the service runs local.
 
 REWRITE_TO_ADDR = True / False
 REWRITE_FROM_ADDR = True / False
 With this settings you can actived the header rewrite function configured in the provider dict,
-if disabled it will use the original from  message header.
+if disabled, the original headers of the message will be used.
 
 REMOVE_MAIL_FROM_PROVIDER = True / False
-Will remove messages from imap after transfer to our smtp server
+Will remove messages from imap folder after transfer to smtp server
 
 SHOW_IMAP_FOLDER = True / False
-When active it will show your the avalible imap folder on provider
+When active, it will show your the avalible imap folder on provider
 '''
 provider = { 
         1: {'login':'example@gmail.com', 'password':'secret1', 'host':'imap.gmail.com', 'port':'', 'addr_to':'example@gmx.net', 'addr_from':'example@gmail.com', 'folder':'INBOX'}, 
@@ -63,7 +62,7 @@ SHOW_IMAP_FOLDER = False
 
 def ImapConn(_id):
     server = provider[_id]['host']
-    user = provider[_id]['login']
+    user   = provider[_id]['login']
     passwd = provider[_id]['password']
     folder = provider[_id]['folder']
     
@@ -105,7 +104,7 @@ def Messagefetcher(_id):
     imapc = ImapConn(_id)
     status, data = imapc.search(None, 'ALL')
     
-    #Fetch all found messages based on there number
+    #Fetch all found messages based on their number
     for n in data[0].split():
         status, msgdata = imapc.fetch(n, '(RFC822)')
         msg = msgdata[0][1]
@@ -113,7 +112,7 @@ def Messagefetcher(_id):
         mail = EditHeader(mail, provider_id)
         SMTPDeliver(mail)
 
-        #Mark message as to delete on imap server side
+        #Mark message for deletion on imap server
         imapc.store(n, '+FLAGS', '\\Deleted')
     
     if REMOVE_MAIL_FROM_PROVIDER:
@@ -123,10 +122,11 @@ def Messagefetcher(_id):
     imapc.logout()
 
 def SMTPDeliver(message):
-    #Deliver the message to our SMTP
+    #Deliver the message to SMTP
     try:
         print (message.get('From'), message.get('to'))
-        smtpc.sendmail(message.get('From'), message.get('to'), message.as_string().encode('ascii', "replace"))
+        smtpc.sendmail(message.get('From'), message.get('to'), 
+                       message.as_string().encode('ascii', "replace"))
     except:
         print("Unexpected error:", sys.exc_info()[0])
         imapc.logout()
