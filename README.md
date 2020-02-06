@@ -7,7 +7,7 @@ jamf requires [Python3](https://www.python.org/) to run.
 jamf can be easily configured within the script, so that no external configuration has to be loaded.
 
 
-_Currently jamf only supports IMAP and no POP3, this feature may be supported in in a future release._
+_Currently jamf only supports IMAP and no POP3, this feature may be supported in a future release._
 
 **Configuration example:**
 
