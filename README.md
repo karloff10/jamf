@@ -3,6 +3,7 @@
 **jamf fetches your mails from an IMAPS server and delivers them to an SMTP server, much like fetchmail does, but using encryption.** 
 
 jamf requires [Python3](https://www.python.org/) to run.
+
 jamf can be easily configured within the script, so that no external configuration has to be loaded.
 
 
