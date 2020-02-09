@@ -110,7 +110,7 @@ def Messagefetcher(_id):
         msg = msgdata[0][1]
         mail = email.message_from_bytes(msg)
         mail = EditHeader(mail, provider_id)
-        SMTPDeliver(mail)
+        SMTPDeliver(mail imapc)
 
         #Mark message for deletion on imap server
         imapc.store(n, '+FLAGS', '\\Deleted')
@@ -121,15 +121,16 @@ def Messagefetcher(_id):
     #Close imap connection
     imapc.logout()
 
-def SMTPDeliver(message):
+def SMTPDeliver(message, imap_session):
     #Deliver the message to SMTP
     try:
         print (message.get('From'), message.get('to'))
         smtpc.sendmail(message.get('From'), message.get('to'), 
                        message.as_string().encode('ascii', "replace"))
+         
     except:
         print("Unexpected error:", sys.exc_info()[0])
-        imapc.logout()
+        imap_session.logout()
         smtpc.quit()
         sys.exit(1)
 
